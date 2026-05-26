@@ -54,29 +54,29 @@ export class VisitorsController {
     return this.visitorsService.findAll();
   }
 
-  @Get(':id')
-  @ApiOperation({ 
-    summary: 'Obter visitante por ID', 
-    description: 'Retorna os detalhes de um visitante específico'
-  })
-  @ApiParam({ 
-    name: 'id', 
-    type: 'number',
-    description: 'ID único do visitante',
-    example: 1
-  })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Visitante encontrado',
-    type: Visitor
-  })
-  @ApiResponse({ 
-    status: 404, 
-    description: 'Visitante não encontrado'
-  })
-  findOne(@Param('id') id: string) {
-    return this.visitorsService.findOne(id);
-  }
+  // @Get(':id')
+  // @ApiOperation({ 
+  //   summary: 'Obter visitante por ID', 
+  //   description: 'Retorna os detalhes de um visitante específico'
+  // })
+  // @ApiParam({ 
+  //   name: 'id', 
+  //   type: 'number',
+  //   description: 'ID único do visitante',
+  //   example: 1
+  // })
+  // @ApiResponse({ 
+  //   status: 200, 
+  //   description: 'Visitante encontrado',
+  //   type: Visitor
+  // })
+  // @ApiResponse({ 
+  //   status: 404, 
+  //   description: 'Visitante não encontrado'
+  // })
+  // findOne(@Param('id') id: string) {
+  //   return this.visitorsService.findOne(id);
+  // }
 
   @Delete(':id')
   @ApiOperation({ 
