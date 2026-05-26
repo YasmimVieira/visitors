@@ -11,6 +11,11 @@ import { appConfig } from './visitors/config/app.config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [typeOrmConfig, appConfig],
+      validationSchema: appConfigSchema,
+      validationOptions: { abortEarly: true },
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -18,11 +23,6 @@ import { appConfig } from './visitors/config/app.config';
         ...configService.get('database'),
         entities: [Visitor],
       })
-    }),
-    ConfigModule.forRoot({
-      load: [typeOrmConfig, appConfig],
-      validationSchema: appConfigSchema,
-      validationOptions: { abortEarly: true },
     }),
     VisitorsModule,
 
