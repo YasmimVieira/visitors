@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { VisitorsModule } from './visitors/visitors.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { appConfigSchema, ConfigType } from './visitors/config/condig.typed';
+import { appConfigSchema, ConfigType } from './visitors/config/config.typed';
 import { Visitor } from './visitors/entities/visitor.entity';
 import { typeOrmConfig } from './visitors/config/database.config';
 import { appConfig } from './visitors/config/app.config';
