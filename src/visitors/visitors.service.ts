@@ -1,33 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateVisitorDto } from './dto/create-visitor.dto';
-import { UpdateVisitorDto } from './dto/update-visitor.dto';
-import { Visitor } from './visitors.model';
-import { randomUUID } from 'crypto';
+import { Visitor } from './entities/visitor.entity';
 
 @Injectable()
 export class VisitorsService {
-  private visitors: Visitor[] = [];
-  
-  create(createVisitorDto: CreateVisitorDto) {
-    const visitor: Visitor = {
-      id: randomUUID(),
-      ...createVisitorDto
-    }
+  constructor(
+    @InjectRepository(Visitor)
+    private readonly visitorsRepository: Repository<Visitor>,
+  ) {}
 
-    this.visitors.push(visitor);
-    
-    return visitor;
+  create(createVisitorDto: CreateVisitorDto) {
+    const visitor = this.visitorsRepository.create(createVisitorDto);
+    return this.visitorsRepository.save(visitor);
   }
 
   findAll() {
-    return this.visitors;
+    return this.visitorsRepository.find();
   }
 
   findOne(id: string) {
-    return this.visitors.find(visitor => visitor.id === id);
+    const visitor = this.visitorsRepository.findOneBy({ id });
+    if (!visitor) throw new NotFoundException(`Visitor ${id} not found`);
+    return visitor;
   }
 
   remove(id: string) {
-    this.visitors = this.visitors.filter((visitor) => visitor.id !== id);
+    return this.visitorsRepository.delete(id);
   }
 }
