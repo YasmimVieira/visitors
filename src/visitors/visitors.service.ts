@@ -20,11 +20,11 @@ export class VisitorsService {
     return this.visitorsRepository.find();
   }
 
-  findOne(id: string) {
-    const visitor = this.visitorsRepository.findOneBy({ id });
-    if (!visitor) throw new NotFoundException(`Visitor ${id} not found`);
-    return visitor;
-  }
+  // findOne(id: string) {
+  //   const visitor = this.visitorsRepository.findOneBy({ id });
+  //   if (!visitor) throw new NotFoundException(`Visitor ${id} not found`);
+  //   return visitor;
+  // }
 
   remove(id: string) {
     return this.visitorsRepository.delete(id);
