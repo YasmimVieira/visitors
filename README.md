@@ -1,98 +1,324 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# 📚 Documentação da API de Visitantes
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🎯 Visão Geral
 
-## Description
+API RESTful desenvolvida com **NestJS** para gerenciar registros de visitantes. A API fornece operações completas de CRUD (Create, Read, Update, Delete) com validação de dados e documentação automática via Swagger.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## 🚀 Como Acessar a Documentação Interativa
 
-```bash
-$ npm install
+**URL:** `http://localhost:3000/swagger`
+
+A documentação interativa permite:
+- ✅ Visualizar todos os endpoints disponíveis
+- ✅ Testar chamadas em tempo real
+- ✅ Ver modelos de requisição e resposta
+- ✅ Validar dados antes de enviar
+
+---
+
+## 📊 Arquitetura da API
+
+```mermaid
+graph TB
+    Client["🌐 Cliente HTTP"]
+    Gateway["🔗 HTTP Gateway"]
+    Controller["🎮 VisitorsController"]
+    Service["⚙️ VisitorsService"]
+    Repository["💾 TypeORM Repository"]
+    Database["🗄️ PostgreSQL Database"]
+    
+    Client -->|HTTP Request| Gateway
+    Gateway -->|Route /visitors| Controller
+    Controller -->|Business Logic| Service
+    Service -->|Query/Mutate| Repository
+    Repository -->|SQL| Database
+    Database -->|Result| Repository
+    Repository -->|Entity| Service
+    Service -->|DTO| Controller
+    Controller -->|JSON Response| Gateway
+    Gateway -->|HTTP Response| Client
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+## 🔗 Endpoints Disponíveis
 
-# watch mode
-$ npm run start:dev
+### 1️⃣ Criar Novo Visitante
 
-# production mode
-$ npm run start:prod
+**`POST /visitors`**
+
+```
+POST /visitors HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "phone": "(11) 98765-4321"
+}
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+**✅ Resposta (201 Created):**
+```json
+{
+  "id": 1,
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "visitDate": "2026-05-26T12:42:04.000Z"
+}
 ```
 
-## Deployment
+**📋 Regras de Validação:**
+- `name`: Obrigatório, string, mínimo 3 caracteres
+- `email`: Obrigatório, deve ser email válido
+- `phone`: Obrigatório, formato: (XX) 9XXXX-XXXX
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+---
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 2️⃣ Listar Todos os Visitantes
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+**`GET /visitors`**
+
+```
+GET /visitors HTTP/1.1
+Host: localhost:3000
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**✅ Resposta (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "name": "João Silva",
+    "email": "joao@example.com",
+    "visitDate": "2026-05-26T12:42:04.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Maria Santos",
+    "email": "maria@example.com",
+    "visitDate": "2026-05-26T13:15:00.000Z"
+  }
+]
+```
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+### 3️⃣ Obter Visitante por ID
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+**`GET /visitors/:id`**
 
-## Support
+```
+GET /visitors/1 HTTP/1.1
+Host: localhost:3000
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+**✅ Resposta (200 OK):**
+```json
+{
+  "id": 1,
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "visitDate": "2026-05-26T12:42:04.000Z"
+}
+```
 
-## Stay in touch
+**❌ Erro (404 Not Found):**
+```json
+{
+  "statusCode": 404,
+  "message": "Visitante não encontrado"
+}
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+### 4️⃣ Deletar Visitante
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+**`DELETE /visitors/:id`**
+
+```
+DELETE /visitors/1 HTTP/1.1
+Host: localhost:3000
+```
+
+**✅ Resposta (200 OK):**
+```json
+{
+  "message": "Visitante deletado com sucesso"
+}
+```
+
+**❌ Erro (404 Not Found):**
+```json
+{
+  "statusCode": 404,
+  "message": "Visitante não encontrado"
+}
+```
+
+---
+
+## 📦 Modelo de Dados
+
+### Entidade: Visitor
+
+```mermaid
+classDiagram
+    class Visitor {
+        +number id
+        +string name
+        +string email
+        +Date visitDate
+    }
+    
+    note for Visitor "
+    ✓ ID gerado automaticamente
+    ✓ Email com validação
+    ✓ Data registrada automaticamente
+    "
+```
+
+---
+
+## 🔄 Fluxo de Requisição e Resposta
+
+```mermaid
+sequenceDiagram
+    participant Client as 👤 Cliente
+    participant API as 🔌 API Gateway
+    participant Controller as 🎮 Controller
+    participant Service as ⚙️ Service
+    participant DB as 🗄️ Database
+
+    Client->>API: POST /visitors {name, email, phone}
+    API->>Controller: Valida request
+    Controller->>Service: create(createVisitorDto)
+    Service->>DB: Salva visitante
+    DB->>Service: Retorna entidade criada
+    Service->>Controller: Retorna Visitor DTO
+    Controller->>API: Serializa JSON
+    API->>Client: 201 Created + Visitor
+```
+
+---
+
+## 🛡️ Validações e Regras de Negócio
+
+| Campo | Tipo | Validação | Exemplo |
+|-------|------|-----------|---------|
+| **name** | string | Obrigatório, 3-255 caracteres | "João Silva" |
+| **email** | string | Obrigatório, formato email | "joao@example.com" |
+| **phone** | string | Obrigatório, formato telefone | "(11) 98765-4321" |
+| **visitDate** | Date | Gerado automaticamente | "2026-05-26T..." |
+
+---
+
+## 🌍 Tratamento de Erros
+
+### Status HTTP Utilizados
+
+| Status | Significado | Exemplo |
+|--------|-------------|---------|
+| **200** | OK | Requisição bem-sucedida |
+| **201** | Created | Recurso criado com sucesso |
+| **400** | Bad Request | Dados inválidos |
+| **404** | Not Found | Recurso não encontrado |
+| **500** | Server Error | Erro interno do servidor |
+
+### Exemplo de Erro de Validação
+
+```json
+{
+  "statusCode": 400,
+  "message": [
+    "name deve ser uma string",
+    "email deve ser válido"
+  ],
+  "error": "Bad Request"
+}
+```
+
+---
+
+## 🔧 Tecnologias Utilizadas
+
+```mermaid
+graph LR
+    A["⚙️ NestJS 11"] --> B["📚 TypeORM"]
+    B --> C["🗄️ PostgreSQL"]
+    A --> D["🔐 Class-Validator"]
+    A --> E["📖 Swagger"]
+    A --> F["🛠️ TypeScript"]
+    
+    style A fill:#ff6b6b
+    style B fill:#1e7e34
+    style C fill:#336791
+    style D fill:#2e8555
+    style E fill:#85d065
+    style F fill:#3178c6
+```
+
+---
+
+## 💡 Exemplos de Uso com cURL
+
+### Criar Visitante
+```bash
+curl -X POST http://localhost:3000/visitors \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "João Silva",
+    "email": "joao@example.com",
+    "phone": "(11) 98765-4321"
+  }'
+```
+
+### Listar Todos
+```bash
+curl -X GET http://localhost:3000/visitors
+```
+
+### Obter por ID
+```bash
+curl -X GET http://localhost:3000/visitors/1
+```
+
+### Deletar
+```bash
+curl -X DELETE http://localhost:3000/visitors/1
+```
+
+---
+
+## 🚀 Como Iniciar a API
+
+```bash
+# Desenvolvimento
+npm run start:dev
+
+# Produção
+npm run build
+npm run start:prod
+```
+
+A API estará disponível em: **http://localhost:3000**
+
+Swagger estará disponível em: **http://localhost:3000/swagger**
+
+---
+
+## 📝 Notas Importantes
+
+- ✅ O campo `visitDate` é gerado automaticamente no banco de dados
+- ✅ Todos os campos de entrada são validados antes de serem salvos
+- ✅ O sistema usa transações para garantir consistência dos dados
+- ✅ Erros são retornados em formato JSON padronizado
+
+---
+
+**Desenvolvido com ❤️ usando NestJS e TypeScript**
