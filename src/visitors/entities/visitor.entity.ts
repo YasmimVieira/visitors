@@ -36,7 +36,7 @@ export class Visitor {
     @Column()
     phone!: string;
 
-    @Column()
+    @Column({ nullable: true })
     quantityOfVisits!: number;
 
     @Column({ nullable: true })
