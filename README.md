@@ -306,9 +306,9 @@ npm run build
 npm run start:prod
 ```
 
-A API estará disponível em: **http://localhost:3000**
+A API estará disponível em: **https://visitors.up.railway.app/visitors**
 
-Swagger estará disponível em: **http://localhost:3000/swagger**
+Swagger estará disponível em: **https://visitors.up.railway.app/visitors/swagger**
 
 ---
 
